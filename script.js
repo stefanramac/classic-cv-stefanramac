@@ -236,6 +236,9 @@ function generatePDF() {
     // GitHub - clickable link
     doc.textWithLink('GitHub: github.com/stefanramac', margin + 70, 43, { url: 'https://github.com/stefanramac' });
     
+    // Website - clickable link
+    doc.textWithLink('Website: stefanramac.com', margin + 140, 43, { url: 'https://stefanramac.com' });
+    
     yPosition = 60;
     
     // Professional Summary
@@ -322,125 +325,119 @@ function generatePDF() {
     
     const experiences = [
         {
-            period: 'July 2025 - November 2025',
+            period: 'July 2025 - Present',
             title: 'System Integration Analyst',
             company: 'Erste Banka Srbija',
             location: 'Novi Sad, Serbia',
-            type: 'Contract'
+            type: 'Contract',
+            description: 'Focus on designing, analyzing, and overseeing implementation of banking integration solutions for digital transformation. Conduct functional analysis, design, and supervision of end-to-end banking solution integrations. Create Integration Design Documents, lead API and system integration testing, and maintain integration repositories. Work with Temenos T24 core banking system, CMS, Country Adapter, eArchive, and qSign projects.',
+            technologies: 'Temenos T24, CMS, Apache Kafka, REST API, Event Streaming, File Transfer, Integration Design'
         },
         {
             period: 'July 2024 - Present',
             title: 'Software Engineer',
             company: 'Eight Code',
             location: 'Serbia',
-            type: 'Freelance'
+            type: 'Freelance',
+            description: 'Freelance software engineering focusing on custom software solutions and integration projects.',
+            technologies: 'Java, Spring Boot, Node.js, JavaScript, MongoDB, REST API, Cloud Solutions'
         },
         {
             period: 'August 2024 - May 2025',
             title: 'Integration Specialist',
             company: 'TNation',
             location: 'Belgrade, Serbia',
-            type: 'Full-time'
+            type: 'Full-time',
+            description: 'Designed, developed, and implemented integration solutions using Software AG WebMethods. Created robust integration architectures connecting enterprise systems and applications. Developed and maintained REST and SOAP web services, utilized JSON and XML for data interchange. Worked with MongoDB for data management and created APIs using Swagger and OpenAPI specifications.',
+            technologies: 'Software AG WebMethods, Java, Spring Boot, REST, SOAP, JSON, XML, MongoDB, Swagger, OpenAPI, Jira, Confluence, Jenkins, Git'
         },
         {
             period: 'August 2024 - May 2025',
             title: 'Integration Specialist',
             company: 'EPICO-IT (via TNation)',
             location: 'Copenhagen, Denmark',
-            type: 'Contract'
+            type: 'Contract',
+            description: 'WebMethods Developer creating integration solutions for XL-Byg Denmark. Developed REST and SOAP web services, leveraged AWS cloud services for hosting and managing integration solutions. Worked extensively with MongoDB and created standardized APIs using Swagger and OpenAPI. Ensured seamless data flow and operational efficiency across enterprise systems.',
+            technologies: 'Software AG WebMethods, Java, Spring Boot, REST, SOAP, JSON, XML, AWS Cloud, MongoDB, Swagger, OpenAPI, Jira, Confluence, Jenkins, Git'
         },
         {
             period: 'December 2023 - August 2024',
             title: 'Integration Platform Developer',
             company: 'NLB DigIT',
             location: 'Belgrade, Serbia',
-            type: 'Full-time'
+            type: 'Full-time',
+            description: 'Integration development on enterprise ESB platform building stable integrations for NLB Banks. Worked with technical and functional groups for systems analysis and design. Developed API proxies and flows in Google Apigee applying OAuth 2.0, JWT, mTLS security standards. Documented technical specifications, performed root cause analysis, and provided production support.',
+            technologies: 'Java, Spring Boot, Azure API Management, Azure Functions, Azure DevOps, Google Apigee, Software AG WebMethods, SOAP, REST API, JSON, XML, OpenAPI, Swagger, SQL, PL/SQL, OAuth 2.0, JWT, mTLS'
         },
         {
             period: 'December 2022 - December 2023',
             title: 'Enterprise Integration Architect',
             company: 'Schneider Electric',
             location: 'Novi Sad, Serbia',
-            type: 'Full-time'
+            type: 'Full-time',
+            description: 'Provided technical leadership for multiple concurrent projects requiring custom software design. Defined technical strategy, led requirements gathering workshops, and designed customer solutions. Performed system, database, application, and network capacity planning. Led solution design reviews, mentored team members, and supported data migration design for utility sector clients.',
+            technologies: 'Solution Architecture, Technical Leadership, System Design, Requirements Analysis, Capacity Planning, Data Migration, Utility Sector, Project Management, Mentoring'
         },
         {
             period: 'August 2021 - December 2022',
             title: 'Integration Developer',
             company: 'Devoteam Serbia',
             location: 'Novi Sad, Serbia',
-            type: 'Full-time'
+            type: 'Full-time',
+            description: 'Developed TIBCO BW5 Fulfillment Orchestration Suite applications for A1 Serbia and A1 Macedonia. Created SOAP services with backend system integrations via SOAP/HTTP and SOAP/JMS for NewBSS project. Designed Technical Products, prepared Bamboo CI/CD pipelines, developed SMPP adapter for VAS Services. Worked on Online Charging System modifications for telecom billing processes.',
+            technologies: 'TIBCO BusinessWorks 5, SOAP, SOAP/HTTP, SOAP/JMS, Bamboo CI/CD, SMPP, Fulfillment Orchestration, Telecommunications, Charging Systems'
         }
     ];
     
     experiences.forEach((exp, index) => {
-        checkPageBreak(18);
+        checkPageBreak(35);
         
+        // Period
         doc.setFontSize(8);
         doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
         doc.setFont('helvetica', 'bold');
         doc.text(exp.period, margin, yPosition);
         
         yPosition += 4;
+        
+        // Job Title
         doc.setFontSize(10);
         doc.setTextColor(50, 50, 50);
         doc.setFont('helvetica', 'bold');
         doc.text(exp.title, margin, yPosition);
         
         yPosition += 5;
+        
+        // Company, Location, Type
         doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
         doc.text(`${exp.company} - ${exp.location} - ${exp.type}`, margin, yPosition);
         
-        yPosition += 8;
-    });
-    
-    // Technical Skills
-    checkPageBreak(30);
-    doc.setFontSize(12);
-    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TECHNICAL SKILLS', margin, yPosition);
-    doc.line(margin, yPosition + 1, margin + 45, yPosition + 1);
-    yPosition += 8;
-    
-    const skills = [
-        {
-            category: 'Integration & Middleware',
-            items: 'Software AG WebMethods, TIBCO BusinessWorks 5, Azure API Management, Azure Logic Apps, Azure Functions, Google Apigee, REST APIs, SOAP, Event Streaming'
-        },
-        {
-            category: 'Programming & Development',
-            items: 'Java, Spring Boot, Node.js, JavaScript, JSON, XML, PL/SQL'
-        },
-        {
-            category: 'Cloud & DevOps',
-            items: 'Microsoft Azure, AWS Cloud, Kubernetes, Docker, Azure DevOps, Jenkins, Bamboo, CI/CD Pipelines, Git'
-        },
-        {
-            category: 'Databases & Messaging',
-            items: 'MongoDB, SQL, RDBMS, Kafka, JMS, SMPP'
-        },
-        {
-            category: 'API & Security',
-            items: 'OAuth 2.0, JWT, API Key Authentication, mTLS, Swagger, OpenAPI'
+        yPosition += 6;
+        
+        // Description
+        if (exp.description) {
+            doc.setFontSize(8);
+            doc.setTextColor(60, 60, 60);
+            doc.setFont('helvetica', 'normal');
+            const descLines = wrapText(exp.description, pageWidth - 2 * margin);
+            doc.text(descLines, margin, yPosition);
+            yPosition += descLines.length * 3.5 + 3;
         }
-    ];
-    
-    skills.forEach(skill => {
-        checkPageBreak(15);
         
-        doc.setFontSize(9);
-        doc.setTextColor(accentBlue[0], accentBlue[1], accentBlue[2]);
-        doc.setFont('helvetica', 'bold');
-        doc.text(skill.category + ':', margin, yPosition);
-        
-        yPosition += 4;
-        doc.setFontSize(8);
-        doc.setTextColor(50, 50, 50);
-        doc.setFont('helvetica', 'normal');
-        const skillLines = wrapText(skill.items, pageWidth - 2 * margin);
-        doc.text(skillLines, margin, yPosition);
-        yPosition += skillLines.length * 3.5 + 4;
+        // Technologies
+        if (exp.technologies) {
+            doc.setFontSize(7);
+            doc.setTextColor(accentBlue[0], accentBlue[1], accentBlue[2]);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Technologies: ', margin, yPosition);
+            doc.setFont('helvetica', 'normal');
+            const techLines = wrapText(exp.technologies, pageWidth - 2 * margin - 20);
+            doc.text(techLines, margin + 20, yPosition);
+            yPosition += techLines.length * 3 + 8;
+        } else {
+            yPosition += 6;
+        }
     });
     
     // Certifications
@@ -468,78 +465,6 @@ function generatePDF() {
         checkPageBreak(6);
         doc.text('- ' + cert, margin + 2, yPosition);
         yPosition += 5;
-    });
-    
-    yPosition += 5;
-    
-    // All Projects
-    if (yPosition > pageHeight - 40) {
-        doc.addPage();
-        yPosition = margin;
-    }
-    
-    doc.setFontSize(12);
-    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.setFont('helvetica', 'bold');
-    doc.text('PROJECTS', margin, yPosition);
-    doc.line(margin, yPosition + 1, margin + 25, yPosition + 1);
-    yPosition += 8;
-    
-    const projects = [
-        {
-            title: 'Banking Integration Solutions - Erste Bank',
-            description: 'Responsible for functional analysis, design, and implementation oversight of banking solutions with focus on system integration. Leading end-to-end integration projects including REST APIs, event streaming, and file transfers. Preparing Integration Design Documents, supporting testing execution, and maintaining integration architecture repositories.',
-            tech: 'RESTful APIs, Kafka, Event Streaming, SDLC, Integration Design, Banking Sector'
-        },
-        {
-            title: 'WebMethods Integration Platform - EPICO-IT Denmark',
-            description: 'Designed, developed, and implemented integration solutions using Software AG WebMethods for XL-Byg Denmark. Created robust integration architectures connecting enterprise systems with REST and SOAP web services. Leveraged AWS cloud services for hosting and managing integration solutions. Worked extensively with MongoDB and created standardized APIs using Swagger and OpenAPI specifications.',
-            tech: 'Software AG WebMethods, Java, AWS, MongoDB, REST/SOAP, OpenAPI, Jenkins'
-        },
-        {
-            title: 'Enterprise ESB Platform - NLB Banks',
-            description: 'Integration development on enterprise ESB platform building stable integrations between various enterprise solutions for NLB Banks across Slovenia, Serbia, Macedonia, Montenegro, and Croatia. Utilized Microsoft Azure for API Management and Logic Apps. Developed API proxies and flows in Google Apigee applying security standards including OAuth 2.0, JWT, and mTLS with caching and performance optimization.',
-            tech: 'Azure API Management, Azure Functions, Google Apigee, SOAP, SQL/PL-SQL, mTLS, OAuth 2.0'
-        },
-        {
-            title: 'Solution Architecture & Technical Consulting - Schneider Electric',
-            description: 'Provided technical leadership for multiple concurrent projects requiring custom software design and deployment. Defined technical strategy, gathered requirements, and led solution design workshops for utility sector clients. Documented data models, functional specs, and integrations. Performed system, database, application, and network capacity planning while mentoring team members and supporting data migration design.',
-            tech: 'Solution Architecture, Technical Leadership, Consulting, Project Management, Mentoring, Utility Sector'
-        },
-        {
-            title: 'TIBCO Fulfillment Orchestration Suite - A1 Serbia',
-            description: 'Developed TIBCO BW5 Fulfillment Orchestration Suite application exposed as SOAP service with invocation of backend systems mainly exposed through SOAP/HTTP and SOAP/JMS for NewBSS project. Designed Technical Products and prepared Bamboo pipelines for deployment. Developed and refactored BW5 applications and SMPP adapter for VAS (value-added) Services. Provided production support as EAI Team member.',
-            tech: 'TIBCO BW5, SOAP, JMS, SMPP, Bamboo CI/CD, Telecommunications'
-        },
-        {
-            title: 'Online Charging System - A1 Macedonia',
-            description: 'Modification and development of TIBCO BW5 applications and TIBCO Fulfillment Orchestration Suite product catalog to fulfill business requirements after change of Charging system in telecommunications company. Implemented system integrations for online charging and billing processes in telecom environment.',
-            tech: 'TIBCO BW5, Product Catalog, Charging Systems, Telecommunications, Billing Integration'
-        }
-    ];
-    
-    projects.forEach(project => {
-        checkPageBreak(30);
-        
-        doc.setFontSize(10);
-        doc.setTextColor(50, 50, 50);
-        doc.setFont('helvetica', 'bold');
-        const titleLines = wrapText(project.title, pageWidth - 2 * margin);
-        doc.text(titleLines, margin, yPosition);
-        yPosition += titleLines.length * 5;
-        
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'normal');
-        const descLines = wrapText(project.description, pageWidth - 2 * margin);
-        doc.text(descLines, margin, yPosition);
-        yPosition += descLines.length * 3.5 + 3;
-        
-        doc.setFontSize(7);
-        doc.setTextColor(accentBlue[0], accentBlue[1], accentBlue[2]);
-        doc.setFont('helvetica', 'italic');
-        const techLines = wrapText('Technologies: ' + project.tech, pageWidth - 2 * margin);
-        doc.text(techLines, margin, yPosition);
-        yPosition += techLines.length * 3 + 6;
     });
     
     // Footer on all pages

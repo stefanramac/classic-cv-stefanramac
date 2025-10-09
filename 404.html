@@ -1,31 +1,143 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Stranica nije pronađena | Stefan Ramač</title>
+    <title>404 - Page Not Found | Stefan Ramač</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .error-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            padding: 40px 20px;
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 600px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #64ffda;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            color: #ccd6f6;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            color: #8892b0;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 35px;
+            background: transparent;
+            color: #64ffda;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid #64ffda;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .home-button:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.3);
+        }
+
+        .home-button svg {
+            width: 20px;
+            height: 20px;
+            fill: #64ffda;
+            transition: transform 0.3s ease;
+        }
+
+        .home-button:hover svg {
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+
+            .error-title {
+                font-size: 1.8rem;
+            }
+
+            .error-message {
+                font-size: 1rem;
+            }
+
+            .home-button {
+                padding: 12px 28px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header Bar -->
-        <header class="header-bar">
-            <h1 class="main-title">Stefan Ramač</h1>
-        </header>
-
         <!-- Main Content -->
         <main class="main-content">
             <!-- 404 Error Section -->
             <section class="error-section">
                 <div class="error-content">
                     <div class="error-code">404</div>
-                    <h2 class="error-title">Stranica nije pronađena</h2>
+                    <h2 class="error-title">Page Not Found</h2>
                     <p class="error-message">
-                        Izvinjavam se, ali stranica koju tražite ne postoji. 
-                        Možda je adresa pogrešno unesena ili je stranica premeštena.
+                        Sorry, the page you are looking for doesn't exist. 
+                        The link might be broken or the page may have been removed.
                     </p>
-                    <a href="/" class="home-button">← Povratak na početnu stranicu</a>
+                    <a href="/" class="home-button">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                        </svg>
+                        Back to Home
+                    </a>
                 </div>
             </section>
         </main>

@@ -1,7 +1,7 @@
 {
   "name": "classic-cv-stefanramac",
   "version": "1.0.0",
-  "description": "Portfolio sajt za Stefana Ramača",
+  "description": "Portfolio website for Stefan Ramač",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

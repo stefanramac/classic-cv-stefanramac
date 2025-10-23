@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Stefan Ramač</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ccd6f6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(17, 34, 64, 0.95);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header h1 {
+            color: #64ffda;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-info {
+            color: #8892b0;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #64ffda;
+            color: #0a192f;
+        }
+
+        .btn-primary:hover {
+            background: #52d4b8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .btn-danger {
+            background: #ff5252;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3838;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #ffa726;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #ff9800;
+            transform: translateY(-2px);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: rgba(17, 34, 64, 0.95);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+        }
+
+        .panel-title {
+            color: #64ffda;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ccd6f6;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 5px;
+            color: #ccd6f6;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .skills-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .skills-input-container input {
+            flex: 1;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64ffda;
+            color: #64ffda;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tag button {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .experience-card {
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .experience-card:hover {
+            border-color: #64ffda;
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.1);
+        }
+
+        .experience-header {
+            margin-bottom: 10px;
+        }
+
+        .experience-position {
+            color: #64ffda;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .experience-company {
+            color: #8892b0;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .experience-dates {
+            color: #8892b0;
+            font-size: 13px;
+        }
+
+        .experience-description {
+            color: #ccd6f6;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .experience-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .experience-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .alert-error {
+            background: rgba(255, 82, 82, 0.1);
+            border: 1px solid rgba(255, 82, 82, 0.3);
+            color: #ff5252;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #8892b0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64ffda;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+        }
+
+        /* Scrollbar styling */
+        .experience-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .experience-list::-webkit-scrollbar-track {
+            background: rgba(10, 25, 47, 0.5);
+            border-radius: 4px;
+        }
+
+        .experience-list::-webkit-scrollbar-thumb {
+            background: rgba(100, 255, 218, 0.3);
+            border-radius: 4px;
+        }
+
+        .experience-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 255, 218, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Experience Dashboard</h1>
+            <div class="header-actions">
+                <span class="user-info" id="user-email">Loading...</span>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                <a href="/" class="btn btn-secondary">View Site</a>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Form Panel -->
+            <div class="panel">
+                <h2 class="panel-title" id="form-title">Add New Experience</h2>
+                
+                <div id="alert" class="alert"></div>
+
+                <form id="experience-form">
+                    <input type="hidden" id="experience-id">
+
+                    <div class="form-group">
+                        <label for="position">Position *</label>
+                        <input type="text" id="position" required placeholder="e.g., Senior Software Engineer">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company *</label>
+                        <input type="text" id="company" required placeholder="e.g., Tech Company Inc.">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-date">Start Date *</label>
+                            <input type="month" id="start-date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end-date">End Date</label>
+                            <input type="month" id="end-date">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="is-present" onchange="toggleEndDate()">
+                            <label for="is-present" style="margin-bottom: 0;">Currently working here</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Job Description *</label>
+                        <textarea id="description" required placeholder="Describe your responsibilities and achievements..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skill-input">Skills</label>
+                        <div class="skills-input-container">
+                            <input type="text" id="skill-input" placeholder="Add a skill (e.g., JavaScript, React)">
+                            <button type="button" class="btn btn-secondary" onclick="addSkill()">Add</button>
+                        </div>
+                        <div class="skills-list" id="skills-list"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Save Experience</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelEdit()" id="cancel-btn" style="display: none;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Experience List Panel -->
+            <div class="panel">
+                <h2 class="panel-title">All Experiences</h2>
+                <div id="experiences-container" class="loading">
+                    Loading experiences...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSkills = [];
+        let editingId = null;
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/check');
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = '/adminlogin';
+                    return;
+                }
+                
+                document.getElementById('user-email').textContent = data.email;
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.href = '/adminlogin';
+            }
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/adminlogin';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Toggle end date
+        function toggleEndDate() {
+            const isPresent = document.getElementById('is-present').checked;
+            const endDate = document.getElementById('end-date');
+            endDate.disabled = isPresent;
+            if (isPresent) {
+                endDate.value = '';
+            }
+        }
+
+        // Add skill
+        function addSkill() {
+            const skillInput = document.getElementById('skill-input');
+            const skill = skillInput.value.trim();
+            
+            if (skill && !currentSkills.includes(skill)) {
+                currentSkills.push(skill);
+                renderSkills();
+                skillInput.value = '';
+            }
+        }
+
+        // Remove skill
+        function removeSkill(index) {
+            currentSkills.splice(index, 1);
+            renderSkills();
+        }
+
+        // Render skills
+        function renderSkills() {
+            const skillsList = document.getElementById('skills-list');
+            skillsList.innerHTML = currentSkills.map((skill, index) => `
+                <div class="skill-tag">
+                    ${skill}
+                    <button onclick="removeSkill(${index})" type="button">&times;</button>
+                </div>
+            `).join('');
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return 'Present';
+            const [year, month] = dateString.split('-');
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            return `${months[parseInt(month) - 1]} ${year}`;
+        }
+
+        // Load experiences
+        async function loadExperiences() {
+            try {
+                const response = await fetch('/api/experiences');
+                const experiences = await response.json();
+                
+                const container = document.getElementById('experiences-container');
+                
+                if (experiences.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No experiences yet. Add your first experience using the form.</div>';
+                    return;
+                }
+                
+                container.className = 'experience-list';
+                container.innerHTML = experiences.map(exp => {
+                    // Convert newlines to <br> tags for proper display
+                    const formattedDescription = exp.description ? exp.description.replace(/\n/g, '<br>') : '';
+                    
+                    return `
+                        <div class="experience-card">
+                            <div class="experience-header">
+                                <div class="experience-position">${exp.position}</div>
+                                <div class="experience-company">${exp.company}</div>
+                                <div class="experience-dates">
+                                    ${formatDate(exp.startDate)} - ${exp.isPresent ? 'Present' : formatDate(exp.endDate)}
+                                </div>
+                            </div>
+                            <div class="experience-description">${formattedDescription}</div>
+                            ${exp.skills && exp.skills.length > 0 ? `
+                                <div class="experience-skills">
+                                    ${exp.skills.map(skill => `<div class="skill-tag">${skill}</div>`).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="experience-actions">
+                                <button class="btn btn-edit" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>Edit</button>
+                                <button class="btn btn-danger" onclick="deleteExperience('${exp._id}')">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading experiences:', error);
+                document.getElementById('experiences-container').innerHTML = 
+                    '<div class="empty-state">Error loading experiences. Please refresh the page.</div>';
+            }
+        }
+
+        // Edit experience
+        function editExperience(experience) {
+            editingId = experience._id;
+            
+            document.getElementById('form-title').textContent = 'Edit Experience';
+            document.getElementById('experience-id').value = experience._id;
+            document.getElementById('position').value = experience.position;
+            document.getElementById('company').value = experience.company;
+            document.getElementById('start-date').value = experience.startDate;
+            document.getElementById('end-date').value = experience.endDate || '';
+            document.getElementById('is-present').checked = experience.isPresent;
+            document.getElementById('description').value = experience.description;
+            
+            currentSkills = experience.skills || [];
+            renderSkills();
+            
+            toggleEndDate();
+            
+            document.getElementById('submit-btn').textContent = 'Update Experience';
+            document.getElementById('cancel-btn').style.display = 'block';
+            
+            // Scroll to form
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cancel edit
+        function cancelEdit() {
+            editingId = null;
+            document.getElementById('form-title').textContent = 'Add New Experience';
+            document.getElementById('experience-form').reset();
+            document.getElementById('experience-id').value = '';
+            currentSkills = [];
+            renderSkills();
+            document.getElementById('submit-btn').textContent = 'Save Experience';
+            document.getElementById('cancel-btn').style.display = 'none';
+        }
+
+        // Delete experience
+        async function deleteExperience(id) {
+            if (!confirm('Are you sure you want to delete this experience?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/experiences/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAlert('Experience deleted successfully', 'success');
+                    loadExperiences();
+                    if (editingId === id) {
+                        cancelEdit();
+                    }
+                } else {
+                    showAlert(data.error || 'Failed to delete experience', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting experience:', error);
+                showAlert('An error occurred while deleting', 'error');
+            }
+        }
+
+        // Form submission
+        document.getElementById('experience-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                position: document.getElementById('position').value,
+                company: document.getElementById('company').value,
+                startDate: document.getElementById('start-date').value,
+                endDate: document.getElementById('end-date').value,
+                isPresent: document.getElementById('is-present').checked,
+                description: document.getElementById('description').value,
+                skills: currentSkills
+            };
+            
+            try {
+                const url = editingId ? `/api/experiences/${editingId}` : '/api/experiences';
+                const method = editingId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAlert(
+                        editingId ? 'Experience updated successfully' : 'Experience added successfully',
+                        'success'
+                    );
+                    cancelEdit();
+                    loadExperiences();
+                } else {
+                    showAlert(data.error || 'Failed to save experience', 'error');
+                }
+            } catch (error) {
+                console.error('Error saving experience:', error);
+                showAlert('An error occurred while saving', 'error');
+            }
+        });
+
+        // Allow adding skill with Enter key
+        document.getElementById('skill-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSkill();
+            }
+        });
+
+        // Initialize
+        checkAuth();
+        loadExperiences();
+    </script>
+</body>
+</html>
+

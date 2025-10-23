@@ -1,5 +1,60 @@
+// Load experiences from API
+async function loadExperiences() {
+    try {
+        const response = await fetch('/api/experiences');
+        const experiences = await response.json();
+        
+        const container = document.getElementById('experience-container');
+        
+        if (!experiences || experiences.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: #8892b0; padding: 20px;">No experiences available.</div>';
+            return;
+        }
+        
+        container.innerHTML = experiences.map(exp => {
+            // Format date
+            const formatDate = (dateString) => {
+                if (!dateString) return 'Present';
+                const [year, month] = dateString.split('-');
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${months[parseInt(month) - 1]} ${year}`;
+            };
+            
+            const startDate = formatDate(exp.startDate);
+            const endDate = exp.isPresent ? 'Present' : formatDate(exp.endDate);
+            
+            // Convert newlines to <br> tags for proper display
+            const formattedDescription = exp.description ? exp.description.replace(/\n/g, '<br>') : '';
+            
+            return `
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <span class="experience-period">${startDate} - ${endDate}</span>
+                        <h3 class="experience-title">${exp.position} · ${exp.company}</h3>
+                    </div>
+                    ${formattedDescription ? `<p class="experience-description">${formattedDescription}</p>` : ''}
+                    ${exp.skills && exp.skills.length > 0 ? `
+                        <div class="tech-tags" style="margin-top: 15px;">
+                            ${exp.skills.map(skill => `<span class="tech-tag">${skill}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error loading experiences:', error);
+        const container = document.getElementById('experience-container');
+        container.innerHTML = '<div style="text-align: center; color: #ff5252; padding: 20px;">Failed to load experiences. Please refresh the page.</div>';
+    }
+}
+
 // Navigation functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Load experiences
+    loadExperiences();
+    
     const navLinks = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.content-section');
     const navItems = document.querySelectorAll('.nav-item');
@@ -174,7 +229,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // PDF Generation Function
-function generatePDF() {
+async function generatePDF() {
+    // Fetch experiences from database
+    let experiences = [];
+    try {
+        const response = await fetch('/api/experiences');
+        experiences = await response.json();
+    } catch (error) {
+        console.error('Error fetching experiences for PDF:', error);
+        alert('Failed to load experiences. Generating PDF with available data.');
+    }
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     
@@ -214,7 +279,7 @@ function generatePDF() {
     doc.setFontSize(24);
     doc.setTextColor(white[0], white[1], white[2]);
     doc.setFont('helvetica', 'bold');
-    doc.text('STEFAN RAMAC', margin, 20);
+    doc.text('STEFAN RAMAČ', margin, 20);
     
     // Title
     doc.setFontSize(14);
@@ -222,22 +287,30 @@ function generatePDF() {
     doc.setFont('helvetica', 'normal');
     doc.text('Software Engineer', margin, 28);
     
-    // Contact Information with clickable links
+    // Contact Information in 2x2 grid with clickable links
     doc.setFontSize(9);
     doc.setTextColor(220, 220, 220);
     
-    // Email
+    // Top row: Email (left) and Website (right)
     doc.text('Email: stefanramac@gmail.com', margin, 38);
     doc.link(margin, 35, 70, 5, { url: 'mailto:stefanramac@gmail.com' });
     
-    // LinkedIn - clickable link
+    doc.textWithLink('Website: stefanramac.com', margin + 75, 38, { url: 'https://stefanramac.com' });
+    
+    // Bottom row: LinkedIn (left) and GitHub (right)
     doc.textWithLink('LinkedIn: linkedin.com/in/stefanramac', margin, 43, { url: 'https://linkedin.com/in/stefanramac' });
     
-    // GitHub - clickable link
-    doc.textWithLink('GitHub: github.com/stefanramac', margin + 70, 43, { url: 'https://github.com/stefanramac' });
+    doc.textWithLink('GitHub: github.com/stefanramac', margin + 75, 43, { url: 'https://github.com/stefanramac' });
     
-    // Website - clickable link
-    doc.textWithLink('Website: stefanramac.com', margin + 140, 43, { url: 'https://stefanramac.com' });
+    // Add profile picture (right side of header) - maintain aspect ratio
+    try {
+        const img = new Image();
+        img.src = 'img/profile-pic.jpeg';
+        // Add image with maintained aspect ratio: x, y, width (height calculated automatically)
+        doc.addImage(img, 'JPEG', pageWidth - 38, 5, 28, 0, undefined, 'FAST');
+    } catch (error) {
+        console.log('Profile picture not found, continuing without it');
+    }
     
     yPosition = 60;
     
@@ -323,84 +396,35 @@ function generatePDF() {
     doc.line(margin, yPosition + 1, margin + 65, yPosition + 1);
     yPosition += 8;
     
-    const experiences = [
-        {
-            period: 'July 2025 - Present',
-            title: 'System Integration Analyst',
-            company: 'Erste Banka Srbija',
-            location: 'Novi Sad, Serbia',
-            type: 'Contract',
-            description: 'Focus on designing, analyzing, and overseeing implementation of banking integration solutions for digital transformation. Conduct functional analysis, design, and supervision of end-to-end banking solution integrations. Create Integration Design Documents, lead API and system integration testing, and maintain integration repositories. Work with Temenos T24 core banking system, CMS, Country Adapter, eArchive, and qSign projects.',
-            technologies: 'Temenos T24, CMS, Apache Kafka, REST API, Event Streaming, File Transfer, Integration Design'
-        },
-        {
-            period: 'July 2024 - Present',
-            title: 'Software Engineer',
-            company: 'Eight Code',
-            location: 'Serbia',
-            type: 'Freelance',
-            description: 'Freelance software engineering focusing on custom software solutions and integration projects.',
-            technologies: 'Java, Spring Boot, Node.js, JavaScript, MongoDB, REST API, Cloud Solutions'
-        },
-        {
-            period: 'August 2024 - May 2025',
-            title: 'Integration Specialist',
-            company: 'TNation',
-            location: 'Belgrade, Serbia',
-            type: 'Full-time',
-            description: 'Designed, developed, and implemented integration solutions using Software AG WebMethods. Created robust integration architectures connecting enterprise systems and applications. Developed and maintained REST and SOAP web services, utilized JSON and XML for data interchange. Worked with MongoDB for data management and created APIs using Swagger and OpenAPI specifications.',
-            technologies: 'Software AG WebMethods, Java, Spring Boot, REST, SOAP, JSON, XML, MongoDB, Swagger, OpenAPI, Jira, Confluence, Jenkins, Git'
-        },
-        {
-            period: 'August 2024 - May 2025',
-            title: 'Integration Specialist',
-            company: 'EPICO-IT (via TNation)',
-            location: 'Copenhagen, Denmark',
-            type: 'Contract',
-            description: 'WebMethods Developer creating integration solutions for XL-Byg Denmark. Developed REST and SOAP web services, leveraged AWS cloud services for hosting and managing integration solutions. Worked extensively with MongoDB and created standardized APIs using Swagger and OpenAPI. Ensured seamless data flow and operational efficiency across enterprise systems.',
-            technologies: 'Software AG WebMethods, Java, Spring Boot, REST, SOAP, JSON, XML, AWS Cloud, MongoDB, Swagger, OpenAPI, Jira, Confluence, Jenkins, Git'
-        },
-        {
-            period: 'December 2023 - August 2024',
-            title: 'Integration Platform Developer',
-            company: 'NLB DigIT',
-            location: 'Belgrade, Serbia',
-            type: 'Full-time',
-            description: 'Integration development on enterprise ESB platform building stable integrations for NLB Banks. Worked with technical and functional groups for systems analysis and design. Developed API proxies and flows in Google Apigee applying OAuth 2.0, JWT, mTLS security standards. Documented technical specifications, performed root cause analysis, and provided production support.',
-            technologies: 'Java, Spring Boot, Azure API Management, Azure Functions, Azure DevOps, Google Apigee, Software AG WebMethods, SOAP, REST API, JSON, XML, OpenAPI, Swagger, SQL, PL/SQL, OAuth 2.0, JWT, mTLS'
-        },
-        {
-            period: 'December 2022 - December 2023',
-            title: 'Enterprise Integration Architect',
-            company: 'Schneider Electric',
-            location: 'Novi Sad, Serbia',
-            type: 'Full-time',
-            description: 'Provided technical leadership for multiple concurrent projects requiring custom software design. Defined technical strategy, led requirements gathering workshops, and designed customer solutions. Performed system, database, application, and network capacity planning. Led solution design reviews, mentored team members, and supported data migration design for utility sector clients.',
-            technologies: 'Solution Architecture, Technical Leadership, System Design, Requirements Analysis, Capacity Planning, Data Migration, Utility Sector, Project Management, Mentoring'
-        },
-        {
-            period: 'August 2021 - December 2022',
-            title: 'Integration Developer',
-            company: 'Devoteam Serbia',
-            location: 'Novi Sad, Serbia',
-            type: 'Full-time',
-            description: 'Developed TIBCO BW5 Fulfillment Orchestration Suite applications for A1 Serbia and A1 Macedonia. Created SOAP services with backend system integrations via SOAP/HTTP and SOAP/JMS for NewBSS project. Designed Technical Products, prepared Bamboo CI/CD pipelines, developed SMPP adapter for VAS Services. Worked on Online Charging System modifications for telecom billing processes.',
-            technologies: 'TIBCO BusinessWorks 5, SOAP, SOAP/HTTP, SOAP/JMS, Bamboo CI/CD, SMPP, Fulfillment Orchestration, Telecommunications, Charging Systems'
-        }
-    ];
+    // Helper function to format date for PDF
+    function formatDateForPDF(dateString) {
+        if (!dateString) return 'Present';
+        const [year, month] = dateString.split('-');
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+        return `${months[parseInt(month) - 1]} ${year}`;
+    }
     
-    experiences.forEach((exp, index) => {
+    // Transform database experiences to PDF format
+    const pdfExperiences = experiences.map(exp => {
+        const startDate = formatDateForPDF(exp.startDate);
+        const endDate = exp.isPresent ? 'Present' : formatDateForPDF(exp.endDate);
+        const period = `${startDate} - ${endDate}`;
+        const technologies = exp.skills && exp.skills.length > 0 ? exp.skills.join(', ') : '';
+        
+        return {
+            period: period,
+            title: exp.position,
+            company: exp.company,
+            description: exp.description,
+            technologies: technologies
+        };
+    });
+    
+    pdfExperiences.forEach((exp, index) => {
         checkPageBreak(35);
         
-        // Period
-        doc.setFontSize(8);
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        doc.setFont('helvetica', 'bold');
-        doc.text(exp.period, margin, yPosition);
-        
-        yPosition += 4;
-        
-        // Job Title
+        // Job Title (First)
         doc.setFontSize(10);
         doc.setTextColor(50, 50, 50);
         doc.setFont('helvetica', 'bold');
@@ -408,32 +432,49 @@ function generatePDF() {
         
         yPosition += 5;
         
-        // Company, Location, Type
+        // Period (Second)
+        doc.setFontSize(8);
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(exp.period, margin, yPosition);
+        
+        yPosition += 4;
+        
+        // Company (Third)
         doc.setFontSize(9);
         doc.setFont('helvetica', 'normal');
-        doc.text(`${exp.company} - ${exp.location} - ${exp.type}`, margin, yPosition);
+        doc.text(exp.company, margin, yPosition);
         
         yPosition += 6;
         
-        // Description
+        // Description (preserve line breaks)
         if (exp.description) {
             doc.setFontSize(8);
             doc.setTextColor(60, 60, 60);
             doc.setFont('helvetica', 'normal');
-            const descLines = wrapText(exp.description, pageWidth - 2 * margin);
-            doc.text(descLines, margin, yPosition);
-            yPosition += descLines.length * 3.5 + 3;
+            
+            // Split by newlines first to preserve manual line breaks
+            const descriptionParagraphs = exp.description.split('\n').filter(p => p.trim());
+            descriptionParagraphs.forEach((paragraph, pIndex) => {
+                const descLines = wrapText(paragraph.trim(), pageWidth - 2 * margin);
+                doc.text(descLines, margin, yPosition);
+                yPosition += descLines.length * 2.8; // Reduced spacing between lines
+                if (pIndex < descriptionParagraphs.length - 1) {
+                    yPosition += 1.5; // Reduced space between paragraphs
+                }
+            });
+            yPosition += 3;
         }
         
-        // Technologies
+        // Technologies/Skills
         if (exp.technologies) {
             doc.setFontSize(7);
             doc.setTextColor(accentBlue[0], accentBlue[1], accentBlue[2]);
             doc.setFont('helvetica', 'bold');
-            doc.text('Technologies: ', margin, yPosition);
+            doc.text('Skills: ', margin, yPosition);
             doc.setFont('helvetica', 'normal');
-            const techLines = wrapText(exp.technologies, pageWidth - 2 * margin - 20);
-            doc.text(techLines, margin + 20, yPosition);
+            const techLines = wrapText(exp.technologies, pageWidth - 2 * margin - 15);
+            doc.text(techLines, margin + 15, yPosition);
             yPosition += techLines.length * 3 + 8;
         } else {
             yPosition += 6;

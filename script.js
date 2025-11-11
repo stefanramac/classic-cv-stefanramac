@@ -254,11 +254,12 @@ async function generatePDF() {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
+    const bottomMargin = 20; // Increased bottom margin for safety
     let yPosition = margin;
     
     // Helper function to add new page if needed
     function checkPageBreak(requiredSpace) {
-        if (yPosition + requiredSpace > pageHeight - margin) {
+        if (yPosition + requiredSpace > pageHeight - bottomMargin) {
             doc.addPage();
             yPosition = margin;
             return true;
@@ -279,13 +280,13 @@ async function generatePDF() {
     doc.setFontSize(24);
     doc.setTextColor(white[0], white[1], white[2]);
     doc.setFont('helvetica', 'bold');
-    doc.text('STEFAN RAMAČ', margin, 20);
+    doc.text('STEFAN RAMAC', margin, 20);
     
     // Title
     doc.setFontSize(14);
     doc.setTextColor(white[0], white[1], white[2]);
     doc.setFont('helvetica', 'normal');
-    doc.text('Software Engineer', margin, 28);
+    doc.text('DevOps Engineer', margin, 28);
     
     // Contact Information in 2x2 grid with clickable links
     doc.setFontSize(9);
@@ -329,7 +330,7 @@ async function generatePDF() {
     doc.setTextColor(50, 50, 50);
     doc.setFont('helvetica', 'normal');
     
-    const summary = "Results-driven IT professional with 4+ years of experience in system integrations, backend development, and cloud solutions. Specializing in designing, developing, and implementing scalable integration architectures that connect enterprise systems and applications. Expertise in Azure middleware, Software AG WebMethods, TIBCO BusinessWorks, Node.js, and Java Spring Boot. Proven track record delivering solutions for international clients including Erste Bank, NLB Banks, Schneider Electric, and A1.";
+    const summary = "Results-driven IT professional with 4+ years of experience in system integrations, backend development, and cloud solutions. Specializing in designing, developing, and implementing scalable integration architectures that connect enterprise systems and applications. Expertise in Azure middleware, Software AG WebMethods, TIBCO BusinessWorks, MuleSoft, Node.js, and Java Spring Boot. Proven track record delivering solutions for international clients including Erste Bank, NLB Banks, Schneider Electric, and A1.";
     const summaryLines = wrapText(summary, pageWidth - 2 * margin);
     doc.text(summaryLines, margin, yPosition);
     yPosition += summaryLines.length * 4 + 8;
@@ -384,7 +385,7 @@ async function generatePDF() {
     yPosition += 5;
     doc.text('English (C1)', margin, yPosition);
     yPosition += 5;
-    doc.text('German (A2)', margin, yPosition);
+    doc.text('German (B1)', margin, yPosition);
     yPosition += 10;
     
     // Work Experience
@@ -422,7 +423,9 @@ async function generatePDF() {
     });
     
     pdfExperiences.forEach((exp, index) => {
-        checkPageBreak(35);
+        // Check if there's enough space for at least the header of experience (40mm)
+        // This prevents splitting experience title/company from its description
+        checkPageBreak(40);
         
         // Job Title (First)
         doc.setFontSize(10);
@@ -457,10 +460,17 @@ async function generatePDF() {
             const descriptionParagraphs = exp.description.split('\n').filter(p => p.trim());
             descriptionParagraphs.forEach((paragraph, pIndex) => {
                 const descLines = wrapText(paragraph.trim(), pageWidth - 2 * margin);
-                doc.text(descLines, margin, yPosition);
-                yPosition += descLines.length * 2.8; // Reduced spacing between lines
+                
+                // Check page break for each line in the paragraph
+                descLines.forEach((line, lineIndex) => {
+                    checkPageBreak(5); // Check if we need a new page before each line
+                    doc.text(line, margin, yPosition);
+                    yPosition += 2.8; // Spacing between lines
+                });
+                
+                // Add space between paragraphs
                 if (pIndex < descriptionParagraphs.length - 1) {
-                    yPosition += 1.5; // Reduced space between paragraphs
+                    yPosition += 1.5;
                 }
             });
             yPosition += 3;
@@ -468,14 +478,23 @@ async function generatePDF() {
         
         // Technologies/Skills
         if (exp.technologies) {
+            checkPageBreak(8); // Check if there's space for skills section
             doc.setFontSize(7);
             doc.setTextColor(accentBlue[0], accentBlue[1], accentBlue[2]);
             doc.setFont('helvetica', 'bold');
             doc.text('Skills: ', margin, yPosition);
             doc.setFont('helvetica', 'normal');
             const techLines = wrapText(exp.technologies, pageWidth - 2 * margin - 15);
-            doc.text(techLines, margin + 15, yPosition);
-            yPosition += techLines.length * 3 + 8;
+            
+            // Check page break for each line of skills
+            techLines.forEach((line, lineIndex) => {
+                if (lineIndex > 0) {
+                    checkPageBreak(4);
+                }
+                doc.text(line, margin + 15, yPosition);
+                yPosition += 3;
+            });
+            yPosition += 8;
         } else {
             yPosition += 6;
         }
@@ -507,16 +526,6 @@ async function generatePDF() {
         doc.text('- ' + cert, margin + 2, yPosition);
         yPosition += 5;
     });
-    
-    // Footer on all pages
-    const totalPages = doc.internal.pages.length - 1;
-    for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(7);
-        doc.setTextColor(150, 150, 150);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Stefan Ramac - Software Engineer | Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-    }
     
     // Save the PDF
     doc.save('Stefan_Ramac_CV.pdf');

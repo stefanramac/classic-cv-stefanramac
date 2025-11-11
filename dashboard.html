@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Stefan Ramač</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -115,6 +116,161 @@
         @media (max-width: 1200px) {
             .main-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            .container {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .header {
+                padding: 20px 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+                width: 100%;
+                line-height: 1.2;
+            }
+
+            .header-actions {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                text-align: center;
+                padding: 12px 10px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            .user-info {
+                width: 100%;
+                font-size: 13px;
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+
+            .panel {
+                padding: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .panel-title {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+            .skills-input-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .skills-input-container input,
+            .skills-input-container .btn {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .skills-list {
+                width: 100%;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+
+            .experience-list {
+                max-height: 400px;
+                overflow-y: auto;
+            }
+
+            .experience-card {
+                padding: 12px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .experience-position {
+                font-size: 16px;
+            }
+
+            .experience-company,
+            .experience-dates {
+                font-size: 12px;
+            }
+
+            .experience-description {
+                font-size: 13px;
+            }
+
+            .experience-actions {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .experience-actions .btn {
+                width: 100%;
+                padding: 8px;
+                font-size: 13px;
+            }
+
+            .btn {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .alert {
+                font-size: 12px;
+                padding: 10px;
             }
         }
 
@@ -351,6 +507,83 @@
         .experience-list::-webkit-scrollbar-thumb:hover {
             background: rgba(100, 255, 218, 0.5);
         }
+
+        /* Password Change Panel */
+        .password-panel {
+            background: rgba(10, 25, 47, 0.6);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .password-panel-header {
+            padding: 15px 20px;
+            background: rgba(10, 25, 47, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-panel-header:hover {
+            background: rgba(15, 30, 52, 0.9);
+        }
+
+        .password-panel-header h3 {
+            color: #64ffda;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .password-panel-toggle {
+            color: #64ffda;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .password-panel-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        .password-panel-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .password-panel-content.expanded {
+            max-height: 500px;
+        }
+
+        .password-form {
+            padding: 20px;
+        }
+
+        .password-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Responsive adjustments for password panel */
+        @media (max-width: 768px) {
+            .password-panel {
+                margin: 0 10px 15px 10px;
+            }
+
+            .password-panel-header {
+                padding: 12px 15px;
+            }
+
+            .password-panel-header h3 {
+                font-size: 14px;
+            }
+
+            .password-form {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -361,6 +594,39 @@
                 <span class="user-info" id="user-email">Loading...</span>
                 <button class="btn btn-secondary" onclick="logout()">Logout</button>
                 <a href="/" class="btn btn-secondary">View Site</a>
+            </div>
+        </div>
+
+        <!-- Password Change Panel -->
+        <div class="password-panel">
+            <div class="password-panel-header" onclick="togglePasswordPanel()">
+                <h3>Change Password</h3>
+                <span class="password-panel-toggle" id="password-toggle">▼</span>
+            </div>
+            <div class="password-panel-content" id="password-panel-content">
+                <form class="password-form" id="password-form" onsubmit="changePassword(event)">
+                    <div id="password-alert" class="alert"></div>
+                    
+                    <div class="form-group">
+                        <label for="current-password">Current Password *</label>
+                        <input type="password" id="current-password" required placeholder="Enter your current password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-password">New Password *</label>
+                        <input type="password" id="new-password" required placeholder="Enter new password (min 6 characters)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password *</label>
+                        <input type="password" id="confirm-password" required placeholder="Confirm new password">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetPasswordForm()">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -466,6 +732,20 @@
             }
         }
 
+        // Toggle password panel
+        function togglePasswordPanel() {
+            const content = document.getElementById('password-panel-content');
+            const toggle = document.getElementById('password-toggle');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                toggle.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                toggle.classList.add('expanded');
+            }
+        }
+
         // Show alert
         function showAlert(message, type) {
             const alert = document.getElementById('alert');
@@ -474,6 +754,72 @@
             setTimeout(() => {
                 alert.classList.remove('show');
             }, 5000);
+        }
+
+        // Show password alert
+        function showPasswordAlert(message, type) {
+            const alert = document.getElementById('password-alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Change password
+        async function changePassword(event) {
+            event.preventDefault();
+            
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Client-side validation
+            if (newPassword !== confirmPassword) {
+                showPasswordAlert('New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showPasswordAlert('New password must be at least 6 characters long', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword,
+                        confirmPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showPasswordAlert('Password changed successfully!', 'success');
+                    resetPasswordForm();
+                    setTimeout(() => {
+                        togglePasswordPanel();
+                    }, 2000);
+                } else {
+                    showPasswordAlert(data.error || 'Failed to change password', 'error');
+                }
+            } catch (error) {
+                console.error('Change password error:', error);
+                showPasswordAlert('An error occurred. Please try again.', 'error');
+            }
+        }
+
+        // Reset password form
+        function resetPasswordForm() {
+            document.getElementById('password-form').reset();
+            const alert = document.getElementById('password-alert');
+            alert.classList.remove('show');
         }
 
         // Toggle end date

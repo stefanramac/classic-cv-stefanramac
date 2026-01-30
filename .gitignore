@@ -1,7 +1,37 @@
+# dependencies
 node_modules/
-npm-debug.log
-.DS_Store
-*.log
-.env
-deployment.zip
 
+# environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# os files
+.DS_Store
+Thumbs.db
+
+# ide
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# deployment
+deployment.zip
+*.zip
+
+# database
+*.sqlite
+*.db
+
+# misc
+.cache/
+tmp/
+temp/
